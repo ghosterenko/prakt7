@@ -106,6 +106,7 @@ int main()
                 break;
             }
         }
+        Sleep(500);
     }
     return 0;
 }
