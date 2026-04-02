@@ -60,7 +60,6 @@ public:
         snake.x = height / 2;
         snake.y = width / 2;
         field[snake.x][snake.y] = node->value;
-        node = node->next;
     }
     void display() {
         Node* node = snake.node();
@@ -88,10 +87,10 @@ int main()
             char key = _getch();
             switch (key)
             {
-            case 'w' : f.field[snake.x][snake.y--] = snake.node()->value; f.field[snake.x][snake.y] = '-'; break;
-            case 'a' : f.field[snake.x--][snake.y] = snake.node()->value; f.field[snake.x][snake.y] = '-'; break;
-            case 's' : f.field[snake.x][snake.y++] = snake.node()->value; f.field[snake.x][snake.y] = '-'; break;
-            case 'd' : f.field[snake.x++][snake.y] = snake.node()->value; f.field[snake.x][snake.y] = '-'; break;
+            case 'w' : case 'W': f.field[snake.x][snake.y--] = snake.node()->value; f.field[snake.x][snake.y] = '-'; break;
+            case 'a' : case 'A': f.field[snake.x--][snake.y] = snake.node()->value; f.field[snake.x][snake.y] = '-'; break;
+            case 's' : case 'S': f.field[snake.x][snake.y++] = snake.node()->value; f.field[snake.x][snake.y] = '-'; break;
+            case 'd' : case 'D': f.field[snake.x++][snake.y] = snake.node()->value; f.field[snake.x][snake.y] = '-'; break;
             default:
                 break;
             }
