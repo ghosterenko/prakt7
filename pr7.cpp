@@ -72,6 +72,12 @@ public:
     
 };
 
+struct Food
+{
+    int x, y;
+    Food(int X, int Y) : x(X), y(Y) {}
+};
+
 int main()
 {
     setlocale(LC_ALL, "ru");
