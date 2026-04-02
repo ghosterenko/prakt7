@@ -1,5 +1,7 @@
 #include <iostream>
-
+#include <conio.h>
+#include <Windows.h>
+    
 struct Node {
 public:
     char value;
@@ -11,6 +13,7 @@ class Snake {
 public:
     Node* head = nullptr;
     int size = 0;
+    int x, y;
     
     void add(char value) {
         Node* newN = new Node(value);
@@ -60,10 +63,13 @@ public:
             }
             field[i][0] = '\n';
         }
-        field[(height / 2)][width / 2] = node->value;
+        snake.x = height / 2;
+        snake.y = width / 2;
+        field[snake.x][snake.y] = node->value;
         node = node->next;
     }
     void display() {
+        Node* node = snake.node();
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
@@ -71,6 +77,7 @@ public:
                 std::cout << field[i][j];
             }
         }
+        field[snake.x][snake.y] = node->value;
     }
     
 };
@@ -83,6 +90,17 @@ int main()
     f.snake = snake;
     f.StartGame();
     f.display();
+
+    while (true) {
+        system("cls");
+        f.display();
+        if (_kbhit()) {
+            char key = _getch();
+            if (key == 'w')
+                snake.x--;
+        }
+        Sleep(500);
+    }
 
     return 0;
 }
