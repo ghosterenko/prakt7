@@ -41,9 +41,9 @@ public:
 class Field {
 public:
     Snake snake;
-    int width = 20;
-    int height = 10;
-    char field[255][255];
+    const static int width = 20;
+    const static int height = 10;
+    char field[height][width];
 
 
     void StartGame() {
@@ -60,11 +60,8 @@ public:
             }
             field[i][0] = '\n';
         }
-        for (int i = 0; i < snake.size; i++)
-        {
-            field[(height / 2) - i][width / 2] = node->value;
-            node = node->next;
-        }
+        field[(height / 2)][width / 2] = node->value;
+        node = node->next;
     }
     void display() {
         for (int i = 0; i < height; i++)
