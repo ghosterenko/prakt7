@@ -1,6 +1,7 @@
 #include <iostream>
 
 struct Node {
+public:
     char value;
     Node* next;
 
@@ -13,10 +14,12 @@ public:
     
     void add(char value) {
         Node* newN = new Node(value);
-        if (head == nullptr)
+        if (head == nullptr) {
             head = newN;
-
-        head->next = newN;
+        }
+        else {
+            head->next = newN;
+        }
         size++;
     }
 
@@ -43,12 +46,12 @@ public:
     char field[255][255];
 
 
-    void draw() {
+    void StartGame() {
         srand(time(NULL));
         Node* node = snake.node();
-        snake.add('0');
-        snake.add('0');
-        snake.add('0');
+        snake.add('o');
+        snake.add('o');
+        snake.add('o');
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
@@ -59,10 +62,11 @@ public:
         }
         for (int i = 0; i < snake.size; i++)
         {
-            field[height / 2][width / 2] = node->value;
-            if (node->next != nullptr)
-                node = node->next;
+            field[(height / 2) - i][width / 2] = node->value;
+            node = node->next;
         }
+    }
+    void display() {
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
@@ -70,16 +74,18 @@ public:
                 std::cout << field[i][j];
             }
         }
-        
     }
     
 };
 
 int main()
 {
+    setlocale(LC_ALL, "ru");
     Snake snake = Snake();
     Field f = Field();
     f.snake = snake;
-    f.draw();
+    f.StartGame();
+    f.display();
 
+    return 0;
 }
