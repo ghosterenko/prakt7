@@ -75,7 +75,12 @@ public:
 struct Food
 {
     int x, y;
-    Food(int X, int Y) : x(X), y(Y) {}
+    
+    void generator(Field d) {
+        srand(time(NULL));
+        x = rand() % d.width;
+        y = rand() % d.height;
+    }
 };
 
 int main()
