@@ -1,112 +1,113 @@
 #include <iostream>
 #include <conio.h>
-#include <Windows.h>
-    
+#include <windows.h>
+
 struct Node {
-public:
-    char value;
+    int x, y;
     Node* next;
-
-    Node() : value('o'), next(nullptr) {}
-};
-class Snake {
-public:
-    Node* head = nullptr;
-    int size = 0;
-    int x, y;
-
-    void add() {
-        Node* newN = new Node();
-        if (head == nullptr) 
-            head = newN;
-        else
-            head->next = newN;
-
-        size++;
-    }
-
-    void display() {
-        Node* node = head;
-        while (node != nullptr)
-        {
-            node->value;
-            node = node->next;
-        }
-    }
-    Node* node() {
-        if (head != nullptr)
-            return head;
-    }
-
 };
 
-class Field {
-public:
-    Snake snake;
-    const static int width = 20;
-    const static int height = 10;
-    char field[height][width];
+int main() {
 
-    void StartGame() {
-        srand(time(NULL));
-        Node* node = snake.node();
-        snake.add();
-        for (int i = 0; i < height; i++)
-        {
-            for (int j = 0; j < width; j++)
-                field[i][j] = '-';
-            field[i][0] = '\n';
-        }
-        snake.x = height / 2;
-        snake.y = width / 2;
-        field[snake.x][snake.y] = node->value;
-    }
-    void display() {
-        Node* node = snake.node();
-        for (int i = 0; i < height; i++)
-            for (int j = 0; j < width; j++)
-                std::cout << field[i][j];
-
-        field[snake.x][snake.y] = node->value;
-    }
-    
-};
-
-struct Food
-{
-    int x, y;
-    
-    void generator(Field d) {
-        srand(time(NULL));
-        x = rand() % d.width;
-        y = rand() % d.height;
-    }
-};
-
-int main()
-{
     setlocale(LC_ALL, "ru");
-    Snake snake = Snake();
-    Field f = Field();
-    f.snake = snake;
-    f.StartGame();
-    f.display();
-    while (true) {
+
+    const int W = 20, H = 20;
+    int fx, fy, d = 3, res = 0;
+    bool gameOver = false;
+
+    Node* head = new Node{ 10, 10, nullptr };
+    head->next = new Node{ 9, 10, nullptr };
+    head->next->next = new Node{ 8, 10, nullptr };
+    int length = 3;
+
+    srand(time(NULL));
+    fx = rand() % W;
+    fy = rand() % H;
+
+    while (!gameOver) {
         system("cls");
-        f.display();
+        for (int i = 0; i < W + 2; i++) 
+            std::cout << "#";
+        std::cout << std::endl;
+
+        for (int y = 0; y < H; y++) {
+            std::cout << "#";
+            for (int x = 0; x < W; x++) {
+                bool isSnake = false;
+                Node* temp = head;
+                while (temp) {
+                    if (temp->x == x && temp->y == y) {
+                        std::cout << "O";
+                        isSnake = true;
+                        break;
+                    }
+                    temp = temp->next;
+                }
+                if (!isSnake && fx == x && fy == y) 
+                    std::cout << "F";
+                else if (!isSnake) 
+                    std::cout << " ";
+            }
+            std::cout << "#" << std::endl;
+        }
+
+        for (int i = 0; i < W + 2; i++)
+            std::cout << "#";
+
         if (_kbhit()) {
             char key = _getch();
-            switch (key)
-            {
-            case 'w' : case 'W': f.field[snake.x][snake.y--] = snake.node()->value; f.field[snake.x][snake.y] = '-'; break;
-            case 'a' : case 'A': f.field[snake.x--][snake.y] = snake.node()->value; f.field[snake.x][snake.y] = '-'; break;
-            case 's' : case 'S': f.field[snake.x][snake.y++] = snake.node()->value; f.field[snake.x][snake.y] = '-'; break;
-            case 'd' : case 'D': f.field[snake.x++][snake.y] = snake.node()->value; f.field[snake.x][snake.y] = '-'; break;
-            default:
-                break;
+            switch (tolower(key)) {
+            case 'w': 
+                if (d != 1) d = 0; break;
+            case 's': 
+                if (d != 0) d = 1; break;
+            case 'a': 
+                if (d != 3) d = 2; break;
+            case 'd': 
+                if (d != 2) d = 3; break;
+            }
+
+            int dx = 0, dy = 0;
+            if (d == 0) 
+                dy = -1;
+            if (d == 1) 
+                dy = 1;
+            if (d == 2) 
+                dx = -1;
+            if (d == 3) 
+                dx = 1;
+
+            Node* newHead = new Node{ head->x + dx, head->y + dy, head };
+            head = newHead;
+
+            Node* temp = head;
+            for (int i = 0; i < length - 1; i++) 
+                temp = temp->next;
+            delete temp->next;
+            temp->next = nullptr;
+
+            if (head->x == fx && head->y == fy) {
+                length++;
+                res++;
+                fx = rand() % W;
+                fy = rand() % H;
+                temp->next = new Node{ temp->x, temp->y, nullptr };
+            }
+
+            if (head->x < 0 || head->x >= W || head->y < 0 || head->y >= H) gameOver = true;
+
+            temp = head->next;
+            while (temp) {
+                if (temp->x == head->x && temp->y == head->y) gameOver = true;
+                temp = temp->next;
             }
         }
-        Sleep(500);
+
+        Sleep(50);
     }
+
+    system("cls");
+    std::cout << "Игра окончена! результат: " << res << std::endl;
+
     return 0;
 }
