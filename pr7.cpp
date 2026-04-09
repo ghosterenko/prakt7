@@ -37,7 +37,7 @@ int main() {
                 Node* temp = head;
                 while (temp) {
                     if (temp->x == x && temp->y == y) {
-                        std::cout << "O";
+                        std::cout << "-";
                         isSnake = true;
                         break;
                     }
