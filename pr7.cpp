@@ -25,6 +25,7 @@ int main() {
     fy = rand() % H;
 
     while (!game) {
+
         system("cls");
         for (int i = 0; i < W + 2; i++)
             std::cout << "#";
@@ -66,42 +67,43 @@ int main() {
             case 'd':
                 if (d != 2) d = 3; break;
             }
-
-            int dx = 0, dy = 0;
-            if (d == 0)
-                dy = -1;
-            if (d == 1)
-                dy = 1;
-            if (d == 2)
-                dx = -1;
-            if (d == 3)
-                dx = 1;
-
-            Node* newHead = new Node{ head->x + dx, head->y + dy, head };
-            head = newHead;
-
-            Node* temp = head;
-            for (int i = 0; i < length - 1; i++)
-                temp = temp->next;
-            delete temp->next;
-            temp->next = nullptr;
-
-            if (head->x == fx && head->y == fy) {
-                length++;
-                res++;
-                fx = rand() % W;
-                fy = rand() % H;
-                temp->next = new Node{ temp->x, temp->y, nullptr };
-            }
-
-            if (head->x < 0 || head->x >= W || head->y < 0 || head->y >= H) game = true;
-
-            temp = head->next;
-            while (temp) {
-                if (temp->x == head->x && temp->y == head->y) game = true;
-                temp = temp->next;
-            }
         }
+        int dx = 0, dy = 0;
+        if (d == 0)
+            dy = -1;
+        if (d == 1)
+            dy = 1;
+        if (d == 2)
+            dx = -1;
+        if (d == 3)
+            dx = 1;
+
+        Node* newHead = new Node{ head->x + dx, head->y + dy, head };
+        head = newHead;
+
+        Node* temp = head;
+        for (int i = 0; i < length - 1; i++)
+            temp = temp->next;
+        delete temp->next;
+        temp->next = nullptr;
+
+        if (head->x == fx && head->y == fy) {
+            length++;
+            res++;
+            fx = rand() % W;
+            fy = rand() % H;
+            temp->next = new Node{ temp->x, temp->y, nullptr };
+        }
+
+        if (head->x < 0 || head->x >= W || head->y < 0 || head->y >= H)
+            game = true;
+
+        temp = head->next;
+        while (temp) {
+            if (temp->x == head->x && temp->y == head->y) game = true;
+            temp = temp->next;
+        }
+
 
         Sleep(50);
     }
